@@ -3,48 +3,74 @@ import { View, Text, TextInput, Button, Image } from 'react-native';
 import { useState, useEffect } from 'react';
 import { API_Test } from '../API/getAPI';
 export default function Home() {
-    const [text, setText] = useState('')
-    const [image, setImage] = useState('')
+    const [name, setName] = useState('')
+    const [mark , setMark] = useState('')
     const [data, setData] = useState([])
+   
+    const [textName , setTextName] = useState('')
+    const [textMark , setTextMark] = useState('')
+    const [count , setCount] = useState(0)
     const onData = () => {
         fetch(API_Test + '/getData')
             .then(item => item.json())
             .then(item => setData(item))
             .catch(err => console.log(err))
     }
+    const onSave = () =>{
+        fetch(API_Test + '/addData',{
+            method:"POST",
+            body: JSON.stringify({name , mark}),
+            headers:{
+                "Content-Type": "application/json"
+            }
+        })
+        .catch((err) => console.log(err))
+    }
+    
 
     useEffect(() => {
         onData()
-    }, [])
+        getData()
+    }, [count])
 
-    const getData = () => {
+    const getData = async () => {
+        
         data.map(item => {
-            setText(item.text)
-            setImage(item.image)
+            setTextName(item.name)
+            setTextMark(item.mark)
         })
     }
     return (
         <View style={{
-            justifyContent: "center", alignItems: "center",
-            flex: 1
+         alignItems: "center",
+            flex: 1, paddingHorizontal:40
         }}>
             <TextInput
-                value={text}
+                onChangeText={(text) =>{
+                    setName(text)
+                }}
                 style={{
-                    marginBottom: 40
-                }} placeholder='Text Input' />
+                    marginBottom: 40,marginTop:80, borderBottomWidth:1, height:40,
+                    width:"100%"
+                }} placeholder='Enter name' />
+            <TextInput
+              onChangeText={(text) =>{
+                setMark(text);
+              }}
+                style={{
+                    marginBottom: 40, borderBottomWidth:1, height:40,
+                    width:"100%"
+                }} placeholder='Enter mark' />
             <Button
                 onPress={() => {
-                    getData()
+                    onSave()
+                    setCount(count+1)
                 }}
-                title='Buttom' />
-            {image.length > 0 ? <Image
-                style={{
-                    width: 60, height: 60, marginTop: 30
-                }} source={{uri:image}} /> : <Image
-                style={{
-                    width: 60, height: 60, marginTop: 30
-                }} source={require('../assets/OIP.jpg')} />}
+                title='Send to API' />
+               {data && <Text style={{
+                    marginTop:30
+                }}>Name: {textName}</Text> }
+               {data && <Text>Mark: {textMark}</Text> }
         </View>
     )
 }
