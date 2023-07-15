@@ -15,5 +15,14 @@ app.get('/getData' , async (req , res) =>{
    }
 })
 
+app.post("/addData", async (req , res) =>{
+   try {
+      const item = new test(req.body);
+      await item.save();
+   } catch (error) {
+      console.log(error)
+   }
+})
+
 
 module.exports = app
