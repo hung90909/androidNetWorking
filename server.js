@@ -11,7 +11,7 @@ app.use(bodyparser.json())
 app.use(express.json())
 app.use(methods("_method"))
 const port = 9999;
-mongoose.connect('mongodb://0.0.0.0:27017/managerLab')
+mongoose.connect('mongodb://localhost:27017/managerLab')
     .then(function () {
         console.log("ket noi thanh cong !")
     })
