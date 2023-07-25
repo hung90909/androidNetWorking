@@ -23,6 +23,22 @@ app.post("/addData", async (req , res) =>{
       console.log(error)
    }
 })
+app.post("/delete", async (req , res) =>{
+   try {
+       await test.deleteOne({name:req.body.ten})
+       .then(res.send("Thanh cong"))
+   } catch (error) {
+      console.log(error)
+   }
+})
+app.put("/update", async (req , res) =>{
+   try {
+       await test.updateOne({name:req.body.ten},req.body)
+       .then(res.send("Thanh cong"))
+   } catch (error) {
+      console.log(error)
+   }
+})
 
 
 module.exports = app
