@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TextInput, Button, Image, FlatList } from 'react-native';
+import { View, Text, TextInput, Button, Image, FlatList, TouchableOpacity, ToastAndroid } from 'react-native';
 import { useState, useEffect } from 'react';
 import { API_Test } from '../API/getAPI';
 export default function Home() {
@@ -24,6 +24,37 @@ export default function Home() {
         })
             .catch((err) => console.log(err))
     }
+    const onDelete = (ten) => {
+        fetch(API_Test + '/delete', {
+            method: "POST",
+            body: JSON.stringify({ ten }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(() => {
+                ToastAndroid.show("Xóa thành công!", ToastAndroid.LONG);
+                return onData();
+            })
+            .catch((err) => console.log(err));
+    }
+    const onUpdate = (ten) => {
+        fetch(API_Test + '/update', {
+            method: "PUT",
+            body: JSON.stringify({ ten , price , dec}),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(() => {
+                ToastAndroid.show("Update thành công!", ToastAndroid.LONG);
+                return onData();
+            })
+            .catch((err) => console.log(err));
+    }
+
+
+
 
     return (
         <View style={{
@@ -57,35 +88,54 @@ export default function Home() {
             <View style={{
                 flexDirection: "row"
             }}>
-                <Button
-                    onPress={() => {
-                        onSave()
-                    }}
-                    title='Insert' />
-                <View style={{
-                    width: 60
-                }} />
-                <Button
+                <TouchableOpacity
                     onPress={() => {
                         onData()
-
                     }}
-                    title='Get' />
+                    style={{
+                        backgroundColor: "blue", borderRadius: 10, marginRight: 15
+                    }}>
+                    <Text style={{
+                        padding: 10, color: "white"
+                    }}>Select</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        onUpdate(name)
+                    }}
+                    style={{
+                        backgroundColor: "blue", borderRadius: 10, marginRight: 15
+                    }}>
+                    <Text style={{
+                        padding: 10, color: "white"
+                    }}>Update</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        onDelete(name)
+                    }}
+                    style={{
+                        backgroundColor: "blue", borderRadius: 10, marginRight: 15
+                    }}>
+                    <Text style={{
+                        padding: 10, color: "white"
+                    }}>Delete</Text>
+                </TouchableOpacity>
             </View>
             <FlatList
-            style={{
-                marginTop:30
-            }}
+                style={{
+                    marginTop: 30
+                }}
                 data={data}
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => {
                     return (
                         <View style={{
-                            flexDirection:"row", marginTop:10
+                            flexDirection: "row", marginTop: 10
                         }}>
-                          <Text>Name:{item.name}     </Text>
-                          <Text>price:{item.price}   </Text>
-                          <Text>Desription:{item.dec}</Text>
+                            <Text>Name:{item.name}     </Text>
+                            <Text>price:{item.price}   </Text>
+                            <Text>Desription:{item.dec}</Text>
                         </View>
                     )
                 }} />
