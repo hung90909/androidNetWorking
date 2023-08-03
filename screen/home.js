@@ -53,9 +53,6 @@ export default function Home() {
             .catch((err) => console.log(err));
     }
 
-
-
-
     return (
         <View style={{
             alignItems: "center",
@@ -98,6 +95,17 @@ export default function Home() {
                     <Text style={{
                         padding: 10, color: "white"
                     }}>Select</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        onSave()
+                    }}
+                    style={{
+                        backgroundColor: "blue", borderRadius: 10, marginRight: 15
+                    }}>
+                    <Text style={{
+                        padding: 10, color: "white"
+                    }}>Insert</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
